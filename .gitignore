@@ -1,0 +1,43 @@
+# Docker credentials and config
+.docker/config.json
+
+# Environment variables and secrets
+*.env
+.env*
+!.env.example
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Editor directories and files
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# Cache and temporary files
+.cache/
+tmp/
+temp/
+
+# Shell history
+.bash_history
+
+# Home directory config files
+.ssh/
+.config/
+.local/
+.sudo_as_admin_successful
+.profile
+.bashrc
+.bash_logout
+
+# Cursor editor files
+.cursor-server/

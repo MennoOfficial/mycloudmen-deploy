@@ -1,0 +1,63 @@
+version: "3"
+
+services:
+  backend:
+    image: ghcr.io/mycloudmen-mennoplochaet/mycloudmen-backend:latest
+    container_name: mycloudmen-backend
+    restart: always
+    networks:
+      - mycloudmen-network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.backend.rule=Host(`mycloudmen.mennoplochaet.be`) && PathPrefix(`/api`)"
+      - "traefik.http.services.backend.loadbalancer.server.port=8080"
+      - "traefik.http.routers.backend.tls=true"
+      - "traefik.http.routers.backend.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.backend.entrypoints=websecure"
+      - "traefik.http.middlewares.my-logger.plugin.logger.level=DEBUG"
+    environment:
+      - APP_BASE_URL=${APP_BASE_URL}
+      - API_BASE_URL=${API_BASE_URL}
+      - SPRING_PROFILES_ACTIVE=prod
+      - MONGO_USER=${MONGO_USER}
+      - MONGO_PASSWORD=${MONGO_PASSWORD}
+      - MONGO_CLUSTER=${MONGO_CLUSTER}
+      - MONGO_DATABASE=${MONGO_DATABASE}
+      - AUTH0_AUDIENCE=${AUTH0_AUDIENCE}
+      - AUTH0_ISSUER_URI=${AUTH0_ISSUER_URI}
+      - TEAMLEADER_CLIENT_ID=${TEAMLEADER_CLIENT_ID}
+      - TEAMLEADER_CLIENT_SECRET=${TEAMLEADER_CLIENT_SECRET}
+      - TEAMLEADER_REDIRECT_URI=${TEAMLEADER_REDIRECT_URI}
+      - ADMIN_DOMAIN=${ADMIN_DOMAIN}
+      - ADMIN_EMAIL=${ADMIN_EMAIL}
+      - GOOGLE_WORKSPACE_API_URL=${GOOGLE_WORKSPACE_API_URL}
+      - SIGNATURESATORI_API_URL=${SIGNATURESATORI_API_URL}
+      - MAIL_HOST=${MAIL_HOST}
+      - MAIL_PORT=${MAIL_PORT}
+      - MAIL_USERNAME=${MAIL_USERNAME}
+      - MAIL_PASSWORD=${MAIL_PASSWORD}
+      - LOGGING_LEVEL_ROOT=DEBUG
+      - LOGGING_LEVEL_WEB=DEBUG
+      - JAVA_TOOL_OPTIONS=-Djdk.tls.client.protocols=TLSv1.3 -Djavax.net.ssl.trustStore=/etc/ssl/certs/java/cacerts -Djavax.net.ssl.trustStorePassword=changeit
+  frontend:
+    image: ghcr.io/mycloudmen-mennoplochaet/mycloudmen-frontend:latest
+    container_name: mycloudmen-frontend
+    restart: always
+    networks:
+      - mycloudmen-network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.frontend.rule=Host(`mycloudmen.mennoplochaet.be`)"
+      - "traefik.http.services.frontend.loadbalancer.server.port=3000"
+      - "traefik.http.routers.frontend.tls=true"
+      - "traefik.http.routers.frontend.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.frontend.entrypoints=websecure"
+      - "traefik.http.routers.frontend.priority=1" # Lower priority than backend
+    environment:
+      - API_URL=https://mycloudmen.mennoplochaet.be/api
+      - AUTH0_DOMAIN=${AUTH0_DOMAIN}
+      - AUTH0_CLIENT_ID=${AUTH0_CLIENT_ID}
+      - AUTH0_CALLBACK_URL=https://mycloudmen.mennoplochaet.be/auth/callback
+networks:
+  mycloudmen-network:
+    external: true

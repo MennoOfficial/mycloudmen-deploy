@@ -1,0 +1,29 @@
+{
+  "request": {
+    "method": "POST",
+    "urlPattern": "/reseller/customers/([^/]+)/credits/new"
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "transformers": ["response-template"],
+    "jsonBody": {
+      "errors": [],
+      "status": "ok",
+      "code": 200,
+      "statusReasonPhrase": "OK",
+      "message": "Credits purchased successfully",
+      "timestamp": "{{now}}",
+      "path": "/reseller/customers/{{request.pathSegments.[2]}}/credits/new",
+      "requestId": "req-{{randomValue length=10 type='ALPHANUMERIC'}}",
+      "transaction": {
+        "type": "purchase",
+        "date": "{{now}}",
+        "details": "Credit purchase",
+        "count": "{{jsonPath request.body '$.count'}}"
+      }
+    }
+  }
+} 

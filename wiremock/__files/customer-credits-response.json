@@ -1,0 +1,8 @@
+{
+    "success": true,
+    "customerId": "{{request.pathSegments.[3]}}",
+    "message": "Credits added successfully",
+    "transactionId": "txn-{{randomValue type='UUID'}}",
+    "timestamp": "{{now}}",
+    "newCreditBalance": 150
+}

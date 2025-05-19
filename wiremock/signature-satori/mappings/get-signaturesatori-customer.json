@@ -1,0 +1,37 @@
+{
+  "request": {
+    "method": "GET",
+    "urlPattern": "/reseller/customers/([^/]+)"
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "transformers": ["response-template"],
+    "jsonBody": {
+      "errors": [],
+      "status": "ok",
+      "code": 200,
+      "statusReasonPhrase": "OK",
+      "message": "Customer details retrieved successfully",
+      "timestamp": "{{now}}",
+      "path": "/reseller/customers/{{request.pathSegments.[2]}}",
+      "requestId": "req-{{randomValue length=10 type='ALPHANUMERIC'}}",
+      "customer": {
+        "customerId": "{{request.pathSegments.[2]}}",
+        "ownerEmail": "customer@example.com",
+        "domains": ["example.com"],
+        "creditBalance": 150,
+        "creditDiscountPercent": 0.1,
+        "subscriptionDiscountPercent": 0.1,
+        "lastTransaction": {
+          "type": "purchase",
+          "date": "{{now offset='-5 days'}}",
+          "details": "Initial credit purchase",
+          "count": 150
+        }
+      }
+    }
+  }
+} 

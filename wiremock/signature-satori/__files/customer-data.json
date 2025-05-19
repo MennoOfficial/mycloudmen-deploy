@@ -1,0 +1,16 @@
+{
+    "id": "{{request.pathSegments.[3]}}",
+    "name": "Customer {{request.pathSegments.[3]}}",
+    "email": "customer{{request.pathSegments.[3]}}@example.com",
+    "phone": "+1-555-123-4567",
+    "address": {
+        "street": "123 Main St",
+        "city": "Anytown",
+        "state": "CA",
+        "zip": "94043",
+        "country": "US"
+    },
+    "created": "{{now offset='-60 days'}}",
+    "status": "active",
+    "credits": 100
+}

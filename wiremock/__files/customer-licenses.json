@@ -1,0 +1,42 @@
+{
+    "licenses": [
+        {
+            "id": "license-1001",
+            "productId": "1010020020",
+            "skuId": "1010020020",
+            "skuName": "Google Workspace Business Starter",
+            "userId": "user1@example.com",
+            "assignedAt": "{{now offset='-45 days'}}",
+            "status": "ACTIVE"
+        },
+        {
+            "id": "license-1002",
+            "productId": "1010020020",
+            "skuId": "1010020020",
+            "skuName": "Google Workspace Business Starter",
+            "userId": "user2@example.com",
+            "assignedAt": "{{now offset='-40 days'}}",
+            "status": "ACTIVE"
+        },
+        {
+            "id": "license-1003",
+            "productId": "1010020028",
+            "skuId": "1010020028",
+            "skuName": "Google Workspace Business Standard",
+            "userId": "user3@example.com",
+            "assignedAt": "{{now offset='-30 days'}}",
+            "status": "ACTIVE"
+        },
+        {
+            "id": "license-1004",
+            "productId": "1010020025",
+            "skuId": "1010020025",
+            "skuName": "Google Workspace Business Plus",
+            "userId": "user4@example.com",
+            "assignedAt": "{{now offset='-25 days'}}",
+            "status": "ACTIVE"
+        }
+    ],
+    "totalCount": 4,
+    "customerId": "{{request.pathSegments.[2]}}"
+}
