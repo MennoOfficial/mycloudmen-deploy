@@ -12,7 +12,7 @@ services:
       - "./google-workspace/mappings:/home/wiremock/mappings"
       - "./google-workspace/__files:/home/wiremock/__files"
     ports:
-      - "${WIREMOCK_GOOGLE_PORT:-8081}:8080"
+      - "${WIREMOCK_GOOGLE_PORT:-8081}"
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.wiremock-google.rule=Host(`${DOMAIN:-mycloudmen.mennoplochaet.be}`) && PathPrefix(`/google-workspace-api`)"
