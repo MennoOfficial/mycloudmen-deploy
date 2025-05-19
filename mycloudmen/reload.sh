@@ -8,7 +8,7 @@ if [ -f ../.env ]; then
 fi
 
 # Set default values if not provided in .env
-DOMAIN=${DOMAIN:-mycloudmen.example.com}
+DOMAIN=${DOMAIN:-mycloudmen.mennoplochaet.be}
 
 # This script should be run on the VM to deploy the latest version
 
