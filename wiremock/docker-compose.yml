@@ -15,7 +15,7 @@ services:
       - "${WIREMOCK_GOOGLE_PORT:-8081}:8080"
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.wiremock-google.rule=Host(`${DOMAIN:-mycloudmen.example.com}`) && PathPrefix(`/google-workspace-api`)"
+      - "traefik.http.routers.wiremock-google.rule=Host(`${DOMAIN:-mycloudmen.mennoplochaet.be}`) && PathPrefix(`/google-workspace-api`)"
       - "traefik.http.services.wiremock-google.loadbalancer.server.port=8080"
       - "traefik.http.routers.wiremock-google.tls=true"
       - "traefik.http.routers.wiremock-google.tls.certresolver=letsencrypt"
@@ -39,7 +39,7 @@ services:
       - "${WIREMOCK_SIGNATURE_PORT:-8082}:8080"
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.wiremock-signature.rule=Host(`${DOMAIN:-mycloudmen.example.com}`) && PathPrefix(`/signature-satori-api`)"
+      - "traefik.http.routers.wiremock-signature.rule=Host(`${DOMAIN:-mycloudmen.mennoplochaet.be}`) && PathPrefix(`/signature-satori-api`)"
       - "traefik.http.services.wiremock-signature.loadbalancer.server.port=8080"
       - "traefik.http.routers.wiremock-signature.tls=true"
       - "traefik.http.routers.wiremock-signature.tls.certresolver=letsencrypt"
