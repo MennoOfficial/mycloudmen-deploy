@@ -12,7 +12,7 @@ services:
       - "--entrypoints.websecure.address=:443"
       - "--entrypoints.web.http.redirections.entrypoint.to=websecure"
       - "--entrypoints.web.http.redirections.entrypoint.scheme=https"
-      - "--certificatesresolvers.letsencrypt.acme.email=plochaetm@gmail.com"
+      - "--certificatesresolvers.letsencrypt.acme.email=${ADMIN_EMAIL:-admin@example.com}"
       - "--certificatesresolvers.letsencrypt.acme.storage=acme.json"
       - "--certificatesresolvers.letsencrypt.acme.httpchallenge.entrypoint=web"
       - "--log.level=INFO"
@@ -25,14 +25,16 @@ services:
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
       - "./acme.json:/acme.json"
+    env_file:
+      - ../.env
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.traefik.rule=Host(`mycloudmen.mennoplochaet.be`) && PathPrefix(`/traefik`)"
+      - "traefik.http.routers.traefik.rule=Host(`${DOMAIN:-mycloudmen.example.com}`) && PathPrefix(`/traefik`)"
       - "traefik.http.routers.traefik.service=api@internal"
       - "traefik.http.routers.traefik.entrypoints=websecure"
       - "traefik.http.routers.traefik.tls.certresolver=letsencrypt"
       - "traefik.http.routers.traefik.middlewares=traefik-auth,strip-traefik-prefix"
-      - "traefik.http.middlewares.traefik-auth.basicauth.users=admin:$$apr1$$H6uskkkW$$IgXLP6ewTrSuBkTrqE8wj/"
+      - "traefik.http.middlewares.traefik-auth.basicauth.users=${TRAEFIK_DASHBOARD_USER:-admin}:${TRAEFIK_DASHBOARD_PASSWORD:-$$apr1$$H6uskkkW$$IgXLP6ewTrSuBkTrqE8wj/}"
       - "traefik.http.middlewares.strip-traefik-prefix.stripprefix.prefixes=/traefik"
 
 networks:
