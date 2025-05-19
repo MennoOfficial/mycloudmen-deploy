@@ -11,15 +11,19 @@ services:
     volumes:
       - "./google-workspace/mappings:/home/wiremock/mappings"
       - "./google-workspace/__files:/home/wiremock/__files"
+    ports:
+      - "${WIREMOCK_GOOGLE_PORT:-8081}:8080"
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.wiremock-google.rule=Host(`mycloudmen.mennoplochaet.be`) && PathPrefix(`/google-workspace-api`)"
+      - "traefik.http.routers.wiremock-google.rule=Host(`${DOMAIN:-mycloudmen.example.com}`) && PathPrefix(`/google-workspace-api`)"
       - "traefik.http.services.wiremock-google.loadbalancer.server.port=8080"
       - "traefik.http.routers.wiremock-google.tls=true"
       - "traefik.http.routers.wiremock-google.tls.certresolver=letsencrypt"
       - "traefik.http.routers.wiremock-google.entrypoints=websecure"
       - "traefik.http.middlewares.strip-google-api.stripprefix.prefixes=/google-workspace-api"
       - "traefik.http.routers.wiremock-google.middlewares=strip-google-api"
+    env_file:
+      - ../.env
 
   wiremock-signature:
     image: wiremock/wiremock:latest
@@ -31,15 +35,19 @@ services:
     volumes:
       - "./signature-satori/mappings:/home/wiremock/mappings"
       - "./signature-satori/__files:/home/wiremock/__files"
+    ports:
+      - "${WIREMOCK_SIGNATURE_PORT:-8082}:8080"
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.wiremock-signature.rule=Host(`mycloudmen.mennoplochaet.be`) && PathPrefix(`/signature-satori-api`)"
+      - "traefik.http.routers.wiremock-signature.rule=Host(`${DOMAIN:-mycloudmen.example.com}`) && PathPrefix(`/signature-satori-api`)"
       - "traefik.http.services.wiremock-signature.loadbalancer.server.port=8080"
       - "traefik.http.routers.wiremock-signature.tls=true"
       - "traefik.http.routers.wiremock-signature.tls.certresolver=letsencrypt"
       - "traefik.http.routers.wiremock-signature.entrypoints=websecure"
       - "traefik.http.middlewares.strip-signature-api.stripprefix.prefixes=/signature-satori-api"
       - "traefik.http.routers.wiremock-signature.middlewares=strip-signature-api"
+    env_file:
+      - ../.env
 networks:
   mycloudmen-network:
     external: true

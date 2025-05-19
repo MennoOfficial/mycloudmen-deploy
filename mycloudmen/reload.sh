@@ -1,6 +1,15 @@
 #!/bin/bash
 set -e
 
+# Load environment variables
+if [ -f ../.env ]; then
+  echo "Loading environment variables from .env file..."
+  export $(grep -v '^#' ../.env | xargs)
+fi
+
+# Set default values if not provided in .env
+DOMAIN=${DOMAIN:-mycloudmen.example.com}
+
 # This script should be run on the VM to deploy the latest version
 
 echo "Pulling latest images from GitHub Container Registry..."
@@ -14,9 +23,9 @@ echo "Cleaning up unused images..."
 docker image prune -f
 
 echo "Deployment complete!"
-echo "Application UI: https://mycloudmen.mennoplochaet.be"
-echo "API Endpoint: https://mycloudmen.mennoplochaet.be/api"
-echo "Traefik Dashboard: https://mycloudmen.mennoplochaet.be/traefik"
+echo "Application UI: https://${DOMAIN}"
+echo "API Endpoint: https://${DOMAIN}/api"
+echo "Traefik Dashboard: https://${DOMAIN}/traefik"
 
 # Print the current version from the running containers
 echo -n "Deployed frontend version: "

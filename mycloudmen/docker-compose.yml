@@ -9,15 +9,15 @@ services:
       - mycloudmen-network
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.backend.rule=Host(`mycloudmen.mennoplochaet.be`) && PathPrefix(`/api`)"
+      - "traefik.http.routers.backend.rule=Host(`${DOMAIN:-mycloudmen.example.com}`) && PathPrefix(`/api`)"
       - "traefik.http.services.backend.loadbalancer.server.port=8080"
       - "traefik.http.routers.backend.tls=true"
       - "traefik.http.routers.backend.tls.certresolver=letsencrypt"
       - "traefik.http.routers.backend.entrypoints=websecure"
       - "traefik.http.middlewares.my-logger.plugin.logger.level=DEBUG"
     environment:
-      - APP_BASE_URL=${APP_BASE_URL}
-      - API_BASE_URL=${API_BASE_URL}
+      - APP_BASE_URL=${APP_BASE_URL:-https://mycloudmen.example.com}
+      - API_BASE_URL=${API_BASE_URL:-https://mycloudmen.example.com/api}
       - SPRING_PROFILES_ACTIVE=prod
       - MONGO_USER=${MONGO_USER}
       - MONGO_PASSWORD=${MONGO_PASSWORD}
@@ -39,6 +39,8 @@ services:
       - LOGGING_LEVEL_ROOT=DEBUG
       - LOGGING_LEVEL_WEB=DEBUG
       - JAVA_TOOL_OPTIONS=-Djdk.tls.client.protocols=TLSv1.3 -Djavax.net.ssl.trustStore=/etc/ssl/certs/java/cacerts -Djavax.net.ssl.trustStorePassword=changeit
+    env_file:
+      - ../.env
   frontend:
     image: ghcr.io/mycloudmen-mennoplochaet/mycloudmen-frontend:latest
     container_name: mycloudmen-frontend
@@ -47,17 +49,19 @@ services:
       - mycloudmen-network
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.frontend.rule=Host(`mycloudmen.mennoplochaet.be`)"
+      - "traefik.http.routers.frontend.rule=Host(`${DOMAIN:-mycloudmen.example.com}`)"
       - "traefik.http.services.frontend.loadbalancer.server.port=3000"
       - "traefik.http.routers.frontend.tls=true"
       - "traefik.http.routers.frontend.tls.certresolver=letsencrypt"
       - "traefik.http.routers.frontend.entrypoints=websecure"
       - "traefik.http.routers.frontend.priority=1" # Lower priority than backend
     environment:
-      - API_URL=https://mycloudmen.mennoplochaet.be/api
+      - API_URL=${API_BASE_URL:-https://mycloudmen.example.com/api}
       - AUTH0_DOMAIN=${AUTH0_DOMAIN}
       - AUTH0_CLIENT_ID=${AUTH0_CLIENT_ID}
-      - AUTH0_CALLBACK_URL=https://mycloudmen.mennoplochaet.be/auth/callback
+      - AUTH0_CALLBACK_URL=${AUTH0_CALLBACK_URL:-https://mycloudmen.example.com/auth/callback}
+    env_file:
+      - ../.env
 networks:
   mycloudmen-network:
     external: true
